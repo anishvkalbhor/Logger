@@ -27,6 +27,7 @@ model Entry {
   impact         String?
   challenges     String?
   referenceLink  String?
+  isPublic       Boolean   @default(false)
   createdAt      DateTime  @default(now())
   updatedAt      DateTime  @updatedAt
 
@@ -37,6 +38,7 @@ model Entry {
 model Profile {
   id          String   @id @default(cuid())
   userId      String   @unique
+  username    String?  @unique
   name        String?
   experience  String?
   location    String?

@@ -81,7 +81,7 @@ export default async function Home() {
           </h1>
           <p className="text-lg text-balance text-muted-foreground">
             Keep a running log of every feature, bug fix, and improvement you
-            ship at work — then turn it into resume bullets and interview
+            ship at work - then turn it into resume bullets and interview
             stories whenever you need them.
           </p>
           <div className="flex flex-col gap-3 pt-2 sm:flex-row">

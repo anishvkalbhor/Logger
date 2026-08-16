@@ -15,6 +15,7 @@ export type EntryDTO = {
   impact: string | null;
   challenges: string | null;
   referenceLink: string | null;
+  isPublic: boolean;
   createdAt: string;
   updatedAt: string;
 };
@@ -22,6 +23,7 @@ export type EntryDTO = {
 export type ProfileDTO = {
   id: string | null;
   userId: string;
+  username: string | null;
   name: string | null;
   experience: string | null;
   location: string | null;

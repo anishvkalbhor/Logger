@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -40,6 +41,7 @@ type FormState = {
   impact: string;
   challenges: string;
   referenceLink: string;
+  isPublic: boolean;
 };
 
 function toFormState(entry?: EntryDTO): FormState {
@@ -53,6 +55,7 @@ function toFormState(entry?: EntryDTO): FormState {
     impact: entry?.impact ?? "",
     challenges: entry?.challenges ?? "",
     referenceLink: entry?.referenceLink ?? "",
+    isPublic: entry?.isPublic ?? false,
   };
 }
 
@@ -252,6 +255,21 @@ export function EntryForm({
         {errors.referenceLink && (
           <p className="text-sm text-destructive">{errors.referenceLink}</p>
         )}
+      </div>
+
+      <div className="flex items-center justify-between gap-4 rounded-xl border p-4">
+        <div className="flex flex-col gap-0.5">
+          <Label htmlFor="isPublic">Make this entry visible on my public profile</Label>
+          <p className="text-sm text-muted-foreground">
+            Shown on your public portfolio page if you&apos;ve set a username.
+            The ticket/reference link is never shown publicly.
+          </p>
+        </div>
+        <Switch
+          id="isPublic"
+          checked={values.isPublic}
+          onCheckedChange={(checked) => set("isPublic", checked)}
+        />
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-10 border-t bg-background p-4 sm:static sm:z-auto sm:border-0 sm:bg-transparent sm:p-0">

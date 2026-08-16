@@ -1,17 +1,22 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import {
   Briefcase,
+  Check,
+  Copy,
   ExternalLink,
   FileText,
   Globe,
   Link2,
+  Loader2,
   MapPin,
   Pencil,
   Trash2,
   Upload,
+  X,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -32,6 +37,7 @@ type FormState = {
   githubUrl: string;
   linkedinUrl: string;
   websiteUrl: string;
+  username: string;
 };
 
 function toFormState(profile: ProfileDTO, fallbackName: string): FormState {
@@ -44,6 +50,7 @@ function toFormState(profile: ProfileDTO, fallbackName: string): FormState {
     githubUrl: profile.githubUrl ?? "",
     linkedinUrl: profile.linkedinUrl ?? "",
     websiteUrl: profile.websiteUrl ?? "",
+    username: profile.username ?? "",
   };
 }
 
@@ -317,6 +324,27 @@ function ProfileView({
         </div>
       )}
 
+      {profile.username && (
+        <div className="flex flex-col gap-2 rounded-xl border border-primary/30 bg-primary/5 p-4">
+          <h3 className="text-sm font-medium">Your public profile</h3>
+          <p className="text-sm text-muted-foreground">
+            Anyone with this link can view your name, bio, skills, links, and
+            resume, plus any entries you&apos;ve marked public — no account
+            needed.
+          </p>
+          <div className="flex items-center gap-2">
+            <Link
+              href={`/u/${profile.username}`}
+              target="_blank"
+              className="min-w-0 flex-1 truncate rounded-lg border bg-background px-3 py-2 text-sm hover:underline"
+            >
+              /u/{profile.username}
+            </Link>
+            <CopyLinkButton username={profile.username} />
+          </div>
+        </div>
+      )}
+
       <div className="flex flex-col gap-2 rounded-xl border p-4">
         <h3 className="text-sm font-medium text-muted-foreground">Resume</h3>
         {profile.resumeUrl ? (
@@ -341,6 +369,24 @@ function ProfileView({
         )}
       </div>
     </div>
+  );
+}
+
+function CopyLinkButton({ username }: { username: string }) {
+  async function handleCopy() {
+    const url = `${window.location.origin}/u/${username}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast.success("Link copied to clipboard");
+    } catch {
+      toast.error("Couldn't copy — check clipboard permissions.");
+    }
+  }
+
+  return (
+    <Button type="button" variant="outline" size="icon" onClick={handleCopy} aria-label="Copy public profile link">
+      <Copy className="size-4" />
+    </Button>
   );
 }
 
@@ -370,8 +416,64 @@ function ProfileForm({
     .map((skill) => skill.trim())
     .filter(Boolean);
 
+  const trimmedUsername = values.username.trim().toLowerCase();
+  const isUnchanged = trimmedUsername === (profile.username ?? "");
+  const [checking, setChecking] = useState(false);
+  const [checkResult, setCheckResult] = useState<{
+    username: string;
+    available: boolean;
+    reason?: string;
+  } | null>(null);
+
+  useEffect(() => {
+    if (!trimmedUsername || isUnchanged) return;
+    const timeout = setTimeout(() => {
+      setChecking(true);
+      fetch(`/api/profile/username-availability?username=${encodeURIComponent(trimmedUsername)}`)
+        .then((res) => res.json())
+        .then((data) => setCheckResult({ username: trimmedUsername, ...data }))
+        .finally(() => setChecking(false));
+    }, 400);
+    return () => clearTimeout(timeout);
+  }, [trimmedUsername, isUnchanged]);
+
+  const showResult =
+    !isUnchanged && checkResult?.username === trimmedUsername && trimmedUsername.length > 0;
+
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-6">
+      <div className="flex flex-col gap-2 rounded-xl border p-4">
+        <h2 className="font-heading text-sm font-semibold">Public profile</h2>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="username">Username</Label>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">/u/</span>
+            <Input
+              id="username"
+              value={values.username}
+              onChange={(e) => onChange("username", e.target.value)}
+              placeholder="yourname"
+              className="flex-1"
+            />
+            {checking && <Loader2 className="size-4 shrink-0 animate-spin text-muted-foreground" />}
+            {!checking && showResult && checkResult && (
+              checkResult.available ? (
+                <Check className="size-4 shrink-0 text-primary" />
+              ) : (
+                <X className="size-4 shrink-0 text-destructive" />
+              )
+            )}
+          </div>
+          {!checking && showResult && checkResult && !checkResult.available && (
+            <p className="text-sm text-destructive">{checkResult.reason}</p>
+          )}
+          <p className="text-xs text-muted-foreground">
+            Sets your public portfolio link at /u/{trimmedUsername || "yourname"}.
+            Leave blank to keep your profile private.
+          </p>
+        </div>
+      </div>
+
       <div className="flex flex-col gap-3 rounded-xl border p-4">
         <h2 className="font-heading text-sm font-semibold">Resume</h2>
         {profile.resumeUrl ? (

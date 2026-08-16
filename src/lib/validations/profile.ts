@@ -25,6 +25,22 @@ const skillsSchema = z
   .default([])
   .transform((skills) => Array.from(new Set(skills)));
 
+export const USERNAME_REGEX = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+export const USERNAME_FORMAT_MESSAGE =
+  "3-30 characters: lowercase letters, numbers, and single hyphens only";
+
+export const usernameSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .max(30)
+  .optional()
+  .transform((value) => (value ? value : undefined))
+  .refine(
+    (value) => !value || (value.length >= 3 && USERNAME_REGEX.test(value)),
+    { message: USERNAME_FORMAT_MESSAGE },
+  );
+
 export const profileInputSchema = z.object({
   name: optionalText(120),
   experience: optionalText(120),
@@ -34,6 +50,7 @@ export const profileInputSchema = z.object({
   githubUrl: optionalUrl(),
   linkedinUrl: optionalUrl(),
   websiteUrl: optionalUrl(),
+  username: usernameSchema,
 });
 
 export type ProfileInput = z.infer<typeof profileInputSchema>;

@@ -42,6 +42,7 @@ export const entryInputSchema = z.object({
   impact: optionalText(2000),
   challenges: optionalText(5000),
   referenceLink: referenceLinkSchema,
+  isPublic: z.boolean().default(false),
 });
 
 export const updateEntrySchema = entryInputSchema.partial();
