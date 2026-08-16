@@ -3,6 +3,7 @@ import { UserButton } from "@clerk/nextjs";
 
 import { ThemeToggle } from "@/components/theme-toggle";
 import { NavLink } from "@/components/nav-link";
+import { LogoMark } from "@/components/logo-mark";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,8 +13,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-4 sm:gap-6">
             <Link
               href="/"
-              className="font-heading text-lg font-semibold tracking-tight"
+              className="flex items-center gap-2 font-heading text-lg font-semibold tracking-tight"
             >
+              <LogoMark className="size-6 text-primary" />
               Logger
             </Link>
             <nav className="flex items-center gap-1">

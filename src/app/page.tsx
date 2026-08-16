@@ -5,6 +5,7 @@ import { ArrowRight, Copy, Lock, Search, Smartphone } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
+import { LogoMark } from "@/components/logo-mark";
 import { cn } from "@/lib/utils";
 
 const FEATURES = [
@@ -40,7 +41,8 @@ export default async function Home() {
 
       <header className="border-b">
         <div className="mx-auto flex h-16 w-full max-w-5xl items-center justify-between px-6">
-          <span className="font-heading text-lg font-semibold tracking-tight">
+          <span className="flex items-center gap-2 font-heading text-lg font-semibold tracking-tight">
+            <LogoMark className="size-6 text-primary" />
             Logger
           </span>
           <nav className="flex items-center gap-2">

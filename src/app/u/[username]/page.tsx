@@ -6,6 +6,7 @@ import { Briefcase, ExternalLink, FileText, Globe, Link2, MapPin } from "lucide-
 import { Badge } from "@/components/ui/badge";
 import { PublicEntryCard } from "@/components/public-entry-card";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { LogoMark } from "@/components/logo-mark";
 import { prisma } from "@/lib/prisma";
 
 type PageProps = { params: Promise<{ username: string }> };
@@ -72,7 +73,8 @@ export default async function PublicProfilePage({ params }: PageProps) {
     <div className="flex flex-1 flex-col">
       <header className="border-b">
         <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between px-4">
-          <span className="font-heading text-lg font-semibold tracking-tight">
+          <span className="flex items-center gap-2 font-heading text-lg font-semibold tracking-tight">
+            <LogoMark className="size-6 text-primary" />
             Logger
           </span>
           <ThemeToggle />
