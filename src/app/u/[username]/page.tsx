@@ -4,7 +4,7 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { Briefcase, ExternalLink, FileText, Globe, Link2, MapPin } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
-import { EntryCard } from "@/components/entry-card";
+import { PublicEntryCard } from "@/components/public-entry-card";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { prisma } from "@/lib/prisma";
 
@@ -22,11 +22,10 @@ async function getPublicProfile(username: string) {
       title: true,
       type: true,
       date: true,
-      problemContext: true,
       whatIDid: true,
+      publicSummary: true,
       techTags: true,
       impact: true,
-      challenges: true,
     },
   });
 
@@ -172,7 +171,7 @@ export default async function PublicProfilePage({ params }: PageProps) {
           ) : (
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {entries.map((entry) => (
-                <EntryCard key={entry.id} entry={entry} href={null} />
+                <PublicEntryCard key={entry.id} entry={entry} />
               ))}
             </div>
           )}

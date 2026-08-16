@@ -42,6 +42,7 @@ type FormState = {
   challenges: string;
   referenceLink: string;
   isPublic: boolean;
+  publicSummary: string;
 };
 
 function toFormState(entry?: EntryDTO): FormState {
@@ -56,6 +57,7 @@ function toFormState(entry?: EntryDTO): FormState {
     challenges: entry?.challenges ?? "",
     referenceLink: entry?.referenceLink ?? "",
     isPublic: entry?.isPublic ?? false,
+    publicSummary: entry?.publicSummary ?? "",
   };
 }
 
@@ -271,6 +273,23 @@ export function EntryForm({
           onCheckedChange={(checked) => set("isPublic", checked)}
         />
       </div>
+
+      {values.isPublic && (
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="publicSummary">Public summary</Label>
+          <Textarea
+            id="publicSummary"
+            value={values.publicSummary}
+            onChange={(e) => set("publicSummary", e.target.value)}
+            placeholder="A portfolio-friendly summary for people outside your company (optional)"
+            rows={3}
+          />
+          <p className="text-sm text-muted-foreground">
+            Shown on your public profile instead of &ldquo;What I did.&rdquo;
+            Leave blank to show &ldquo;What I did&rdquo; as-is.
+          </p>
+        </div>
+      )}
 
       <div className="fixed inset-x-0 bottom-0 z-10 border-t bg-background p-4 sm:static sm:z-auto sm:border-0 sm:bg-transparent sm:p-0">
         <div className="mx-auto flex max-w-5xl gap-3 sm:mx-0">

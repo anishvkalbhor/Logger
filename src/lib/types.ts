@@ -16,6 +16,7 @@ export type EntryDTO = {
   challenges: string | null;
   referenceLink: string | null;
   isPublic: boolean;
+  publicSummary: string | null;
   createdAt: string;
   updatedAt: string;
 };
