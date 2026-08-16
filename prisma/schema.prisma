@@ -1,0 +1,35 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum EntryType {
+  FEATURE
+  BUG_FIX
+  IMPROVEMENT
+  TECH_DEBT
+  OTHER
+}
+
+model Entry {
+  id             String    @id @default(cuid())
+  userId         String
+  title          String
+  type           EntryType
+  date           DateTime
+  problemContext String?
+  whatIDid       String
+  techTags       String[]
+  impact         String?
+  challenges     String?
+  referenceLink  String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([userId, date])
+}
