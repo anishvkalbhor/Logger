@@ -2,18 +2,25 @@ import Link from "next/link";
 import { UserButton } from "@clerk/nextjs";
 
 import { ThemeToggle } from "@/components/theme-toggle";
+import { NavLink } from "@/components/nav-link";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex flex-1 flex-col">
       <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
         <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between px-4">
-          <Link
-            href="/dashboard"
-            className="font-heading text-lg font-semibold tracking-tight"
-          >
-            Logger
-          </Link>
+          <div className="flex items-center gap-4 sm:gap-6">
+            <Link
+              href="/"
+              className="font-heading text-lg font-semibold tracking-tight"
+            >
+              Logger
+            </Link>
+            <nav className="flex items-center gap-1">
+              <NavLink href="/dashboard">Dashboard</NavLink>
+              <NavLink href="/profile">Profile</NavLink>
+            </nav>
+          </div>
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <UserButton />

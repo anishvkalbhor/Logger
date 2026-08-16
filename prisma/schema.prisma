@@ -33,3 +33,20 @@ model Entry {
   @@index([userId])
   @@index([userId, date])
 }
+
+model Profile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  name        String?
+  experience  String?
+  location    String?
+  skills      String[]
+  bio         String?
+  githubUrl   String?
+  linkedinUrl String?
+  websiteUrl  String?
+  resumeUrl   String?
+  resumeName  String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

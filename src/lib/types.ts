@@ -18,3 +18,18 @@ export type EntryDTO = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type ProfileDTO = {
+  id: string | null;
+  userId: string;
+  name: string | null;
+  experience: string | null;
+  location: string | null;
+  skills: string[];
+  bio: string | null;
+  githubUrl: string | null;
+  linkedinUrl: string | null;
+  websiteUrl: string | null;
+  resumeUrl: string | null;
+  resumeName: string | null;
+};

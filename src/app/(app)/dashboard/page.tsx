@@ -3,7 +3,7 @@
 import { Suspense, useCallback, useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
-import { ArrowDownAZ, ArrowUpAZ, Download } from "lucide-react";
+import { ArrowDownAZ, ArrowUpAZ, ChevronLeft, ChevronRight, Download } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -67,8 +67,11 @@ function DashboardContent() {
   const [techInput, setTechInput] = useState(tech);
   const [entries, setEntries] = useState<EntryDTO[]>([]);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [cursorHistory, setCursorHistory] = useState<(string | undefined)[]>([
+    undefined,
+  ]);
   const [loading, setLoading] = useState(true);
-  const [loadingMore, setLoadingMore] = useState(false);
   const [stats, setStats] = useState<Stats | null>(null);
   const [exporting, setExporting] = useState(false);
 
@@ -78,6 +81,8 @@ function DashboardContent() {
       if (value) params.set(key, value);
       else params.delete(key);
       router.replace(`/dashboard?${params.toString()}`);
+      setPageIndex(0);
+      setCursorHistory([undefined]);
     },
     [router, searchParams],
   );
@@ -112,12 +117,16 @@ function DashboardContent() {
     [q, type, tech, sort],
   );
 
+  const pageCursor = cursorHistory[pageIndex];
+
   useEffect(() => {
     let cancelled = false;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- standard fetch-on-mount loading flag
     setLoading(true);
     Promise.all([
-      fetch(`/api/entries?${buildQuery()}`).then((res) => res.json()),
+      fetch(`/api/entries?${buildQuery({ cursor: pageCursor })}`).then((res) =>
+        res.json(),
+      ),
       fetch("/api/entries/stats").then((res) => res.json()),
     ])
       .then(([list, statsData]) => {
@@ -135,19 +144,21 @@ function DashboardContent() {
     return () => {
       cancelled = true;
     };
-  }, [buildQuery]);
+  }, [buildQuery, pageCursor]);
 
-  async function handleLoadMore() {
+  function handleNextPage() {
     if (!nextCursor) return;
-    setLoadingMore(true);
-    try {
-      const res = await fetch(`/api/entries?${buildQuery({ cursor: nextCursor })}`);
-      const data = await res.json();
-      setEntries((prev) => [...prev, ...data.items]);
-      setNextCursor(data.nextCursor);
-    } finally {
-      setLoadingMore(false);
-    }
+    setCursorHistory((prev) => {
+      if (prev[pageIndex + 1] === nextCursor) return prev;
+      const next = [...prev];
+      next[pageIndex + 1] = nextCursor;
+      return next;
+    });
+    setPageIndex((p) => p + 1);
+  }
+
+  function handlePreviousPage() {
+    setPageIndex((p) => Math.max(0, p - 1));
   }
 
   async function handleExport() {
@@ -305,13 +316,29 @@ function DashboardContent() {
               <EntryCard key={entry.id} entry={entry} />
             ))}
           </div>
-          {nextCursor && (
-            <div className="flex justify-center">
-              <Button variant="outline" onClick={handleLoadMore} disabled={loadingMore}>
-                {loadingMore ? "Loading…" : "Load more"}
-              </Button>
-            </div>
-          )}
+          <div className="flex items-center justify-center gap-3">
+            <Button
+              variant="outline"
+              size="icon"
+              aria-label="Previous page"
+              onClick={handlePreviousPage}
+              disabled={pageIndex === 0 || loading}
+            >
+              <ChevronLeft className="size-4" />
+            </Button>
+            <span className="text-sm text-muted-foreground">
+              Page {pageIndex + 1}
+            </span>
+            <Button
+              variant="outline"
+              size="icon"
+              aria-label="Next page"
+              onClick={handleNextPage}
+              disabled={!nextCursor || loading}
+            >
+              <ChevronRight className="size-4" />
+            </Button>
+          </div>
         </>
       )}
 
