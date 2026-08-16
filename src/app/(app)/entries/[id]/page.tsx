@@ -84,7 +84,9 @@ export default function EntryDetailPage() {
             <Badge variant="secondary">{ENTRY_TYPE_LABELS[entry.type]}</Badge>
             <span className="text-sm text-muted-foreground">{date}</span>
           </div>
-          <h1 className="text-2xl font-semibold tracking-tight">{entry.title}</h1>
+          <h1 className="font-heading text-2xl font-semibold tracking-tight">
+            {entry.title}
+          </h1>
         </div>
         <div className="flex gap-2">
           <Link

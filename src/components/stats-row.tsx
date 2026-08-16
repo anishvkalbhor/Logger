@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { ENTRY_TYPE_LABELS } from "@/components/entry-form";
 import { ENTRY_TYPES } from "@/lib/validations/entry";
+import { cn } from "@/lib/utils";
 import type { EntryType } from "@/lib/types";
 
 type Stats = {
@@ -15,7 +16,7 @@ export function StatsRow({ stats }: { stats: Stats }) {
   return (
     <div className="flex flex-col gap-3">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <StatTile label="Total entries" value={stats.total} />
+        <StatTile label="Total entries" value={stats.total} emphasis />
         {ENTRY_TYPES.map((type) => (
           <StatTile
             key={type}
@@ -42,11 +43,31 @@ export function StatsRow({ stats }: { stats: Stats }) {
   );
 }
 
-function StatTile({ label, value }: { label: string; value: number }) {
+function StatTile({
+  label,
+  value,
+  emphasis,
+}: {
+  label: string;
+  value: number;
+  emphasis?: boolean;
+}) {
   return (
-    <Card className="gap-1 px-4 py-3">
+    <Card
+      className={cn(
+        "gap-1 px-4 py-3",
+        emphasis && "border-primary/30 bg-primary/5",
+      )}
+    >
       <span className="text-sm text-muted-foreground">{label}</span>
-      <span className="text-2xl font-semibold">{value}</span>
+      <span
+        className={cn(
+          "font-heading text-2xl font-semibold",
+          emphasis && "text-primary",
+        )}
+      >
+        {value}
+      </span>
     </Card>
   );
 }
