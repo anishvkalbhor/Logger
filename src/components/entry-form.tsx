@@ -9,6 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { RichTextEditor } from "@/components/rich-text-editor";
 import {
   Select,
   SelectContent,
@@ -17,15 +18,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ENTRY_TYPES, entryInputSchema } from "@/lib/validations/entry";
+import { ENTRY_TYPE_LABELS } from "@/lib/entry-type-styles";
 import type { EntryDTO, EntryType } from "@/lib/types";
-
-export const ENTRY_TYPE_LABELS: Record<EntryType, string> = {
-  FEATURE: "Feature",
-  BUG_FIX: "Bug Fix",
-  IMPROVEMENT: "Improvement",
-  TECH_DEBT: "Tech Debt",
-  OTHER: "Other",
-};
 
 function toDateInputValue(date: string | Date) {
   return new Date(date).toISOString().slice(0, 10);
@@ -177,24 +171,21 @@ export function EntryForm({
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="problemContext">Problem / Context</Label>
-        <Textarea
+        <RichTextEditor
           id="problemContext"
           value={values.problemContext}
-          onChange={(e) => set("problemContext", e.target.value)}
+          onChange={(markdown) => set("problemContext", markdown)}
           placeholder="Why was this needed?"
-          rows={3}
         />
       </div>
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="whatIDid">What I did</Label>
-        <Textarea
+        <RichTextEditor
           id="whatIDid"
           value={values.whatIDid}
-          onChange={(e) => set("whatIDid", e.target.value)}
+          onChange={(markdown) => set("whatIDid", markdown)}
           placeholder="Technical summary of the work"
-          rows={4}
-          aria-invalid={!!errors.whatIDid}
         />
         {errors.whatIDid && (
           <p className="text-sm text-destructive">{errors.whatIDid}</p>
@@ -214,7 +205,7 @@ export function EntryForm({
             {tagPreview.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+                className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-secondary-foreground"
               >
                 {tag}
               </span>
@@ -236,12 +227,11 @@ export function EntryForm({
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="challenges">Challenges / Decisions</Label>
-        <Textarea
+        <RichTextEditor
           id="challenges"
           value={values.challenges}
-          onChange={(e) => set("challenges", e.target.value)}
+          onChange={(markdown) => set("challenges", markdown)}
           placeholder="Tradeoffs, decisions made (optional)"
-          rows={2}
         />
       </div>
 
@@ -277,12 +267,11 @@ export function EntryForm({
       {values.isPublic && (
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="publicSummary">Public summary</Label>
-          <Textarea
+          <RichTextEditor
             id="publicSummary"
             value={values.publicSummary}
-            onChange={(e) => set("publicSummary", e.target.value)}
+            onChange={(markdown) => set("publicSummary", markdown)}
             placeholder="A portfolio-friendly summary for people outside your company (optional)"
-            rows={3}
           />
           <p className="text-sm text-muted-foreground">
             Shown on your public profile instead of &ldquo;What I did.&rdquo;

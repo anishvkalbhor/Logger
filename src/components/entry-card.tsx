@@ -3,7 +3,8 @@ import { Globe } from "lucide-react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ENTRY_TYPE_LABELS } from "@/components/entry-form";
+import { ENTRY_TYPE_BADGE_CLASSES, ENTRY_TYPE_LABELS } from "@/lib/entry-type-styles";
+import { stripMarkdown } from "@/lib/markdown";
 import type { EntryDTO } from "@/lib/types";
 
 type EntryCardData = Pick<
@@ -31,7 +32,12 @@ export function EntryCard({
       <CardHeader className="gap-1.5">
         <div className="flex items-center justify-between gap-2">
           <div className="flex items-center gap-1.5">
-            <Badge variant="secondary">{ENTRY_TYPE_LABELS[entry.type]}</Badge>
+            <Badge
+              variant="secondary"
+              className={ENTRY_TYPE_BADGE_CLASSES[entry.type]}
+            >
+              {ENTRY_TYPE_LABELS[entry.type]}
+            </Badge>
             {entry.isPublic && (
               <Badge variant="outline" className="gap-1 text-muted-foreground">
                 <Globe className="size-3" />
@@ -45,14 +51,14 @@ export function EntryCard({
       </CardHeader>
       <CardContent>
         <p className="line-clamp-2 text-sm text-muted-foreground">
-          {entry.whatIDid}
+          {stripMarkdown(entry.whatIDid)}
         </p>
         {entry.techTags.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-1.5">
             {entry.techTags.slice(0, 5).map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+                className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-secondary-foreground"
               >
                 {tag}
               </span>

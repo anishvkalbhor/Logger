@@ -10,16 +10,29 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CopyBulletButton } from "@/components/copy-bullet-button";
 import { DeleteEntryButton } from "@/components/delete-entry-button";
-import { ENTRY_TYPE_LABELS } from "@/components/entry-form";
+import { ENTRY_TYPE_BADGE_CLASSES, ENTRY_TYPE_LABELS } from "@/lib/entry-type-styles";
+import { MarkdownContent } from "@/components/markdown-content";
 import { cn } from "@/lib/utils";
 import type { EntryDTO } from "@/lib/types";
 
-function Field({ label, value }: { label: string; value?: string | null }) {
+function Field({
+  label,
+  value,
+  markdown,
+}: {
+  label: string;
+  value?: string | null;
+  markdown?: boolean;
+}) {
   if (!value) return null;
   return (
     <div className="flex flex-col gap-1">
       <h2 className="text-sm font-medium text-muted-foreground">{label}</h2>
-      <p className="whitespace-pre-wrap text-sm">{value}</p>
+      {markdown ? (
+        <MarkdownContent content={value} />
+      ) : (
+        <p className="whitespace-pre-wrap text-sm">{value}</p>
+      )}
     </div>
   );
 }
@@ -81,7 +94,12 @@ export default function EntryDetailPage() {
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
-            <Badge variant="secondary">{ENTRY_TYPE_LABELS[entry.type]}</Badge>
+            <Badge
+              variant="secondary"
+              className={ENTRY_TYPE_BADGE_CLASSES[entry.type]}
+            >
+              {ENTRY_TYPE_LABELS[entry.type]}
+            </Badge>
             <span className="text-sm text-muted-foreground">{date}</span>
           </div>
           <h1 className="font-heading text-2xl font-semibold tracking-tight">
@@ -105,7 +123,7 @@ export default function EntryDetailPage() {
           {entry.techTags.map((tag) => (
             <span
               key={tag}
-              className="rounded-full bg-muted px-2.5 py-1 text-xs text-muted-foreground"
+              className="rounded-full bg-muted px-2.5 py-1 text-xs font-medium text-secondary-foreground"
             >
               {tag}
             </span>
@@ -114,10 +132,10 @@ export default function EntryDetailPage() {
       )}
 
       <div className="flex flex-col gap-4 rounded-xl border p-4">
-        <Field label="Problem / Context" value={entry.problemContext} />
-        <Field label="What I did" value={entry.whatIDid} />
+        <Field label="Problem / Context" value={entry.problemContext} markdown />
+        <Field label="What I did" value={entry.whatIDid} markdown />
         <Field label="Impact / Result" value={entry.impact} />
-        <Field label="Challenges / Decisions" value={entry.challenges} />
+        <Field label="Challenges / Decisions" value={entry.challenges} markdown />
         {entry.referenceLink && (
           <div className="flex flex-col gap-1">
             <h2 className="text-sm font-medium text-muted-foreground">

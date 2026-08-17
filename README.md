@@ -8,9 +8,12 @@ required.
 ## Features
 
 - **Embedded auth** via Clerk (sign-in/sign-up rendered in-app, not a hosted redirect)
-- **Entry log**: title, type (Feature / Bug Fix / Improvement / Tech Debt / Other),
-  date, problem context, what you did, tech tags, impact, challenges/decisions, and
-  an optional ticket/reference link
+- **Entry log**: title, type (Feature / Bug Fix / Improvement / Tech Debt / Other, each
+  with its own badge color), date, problem context, what you did, tech tags, impact,
+  challenges/decisions, and an optional ticket/reference link
+- **Rich text editing**: a Tiptap-based editor (bold, italic, inline code, code
+  blocks, lists) for the long-form fields, stored as Markdown and rendered back
+  with `react-markdown` on entry detail pages, cards, and the public portfolio
 - **Dashboard**: search, filter by type/tech tag, sort by date, paginated (Previous/Next)
 - **Stats**: total entries, counts by type, most-used tech tags
 - **Resume bullet export**: one-click copy-to-clipboard bullet per entry, plus a
@@ -33,6 +36,8 @@ at the API layer, not just hidden in the UI.
 - [Prisma 7](https://www.prisma.io) + PostgreSQL ([Neon](https://neon.tech) /
   Vercel Postgres), via the `@prisma/adapter-pg` driver adapter
 - [Vercel Blob](https://vercel.com/docs/storage/vercel-blob) for resume storage
+- [Tiptap](https://tiptap.dev) (`tiptap-markdown`) for rich-text entry fields,
+  [react-markdown](https://github.com/remarkjs/react-markdown) for rendering them
 - [Tailwind CSS v4](https://tailwindcss.com) + [shadcn/ui](https://ui.shadcn.com)
   (built on [Base UI](https://base-ui.com))
 - Deployed on [Vercel](https://vercel.com)
@@ -149,8 +154,12 @@ src/
       profile/, profile/resume/, profile/username-availability/
       u/[username]/resume/       # Public resume download proxy
   components/                    # Shared UI (entry form/card, profile, etc.)
+  components/rich-text-editor.tsx # Tiptap-based Markdown editor for entry fields
+  components/markdown-content.tsx # Renders stored Markdown back to HTML
   components/ui/                 # shadcn/ui primitives
   lib/                           # Prisma client, validation schemas, helpers
+  lib/markdown.ts                # Strips Markdown to plain text (bullets/previews)
+  lib/entry-type-styles.ts       # Entry type labels + per-type badge colors
   proxy.ts                       # Clerk middleware — route protection allowlist
 prisma/
   schema.prisma

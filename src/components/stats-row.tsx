@@ -1,5 +1,5 @@
 import { Card } from "@/components/ui/card";
-import { ENTRY_TYPE_LABELS } from "@/components/entry-form";
+import { ENTRY_TYPE_LABELS } from "@/lib/entry-type-styles";
 import { ENTRY_TYPES } from "@/lib/validations/entry";
 import { cn } from "@/lib/utils";
 import type { EntryType } from "@/lib/types";

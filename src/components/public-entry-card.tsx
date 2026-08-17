@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { ENTRY_TYPE_LABELS } from "@/components/entry-form";
+import { ENTRY_TYPE_BADGE_CLASSES, ENTRY_TYPE_LABELS } from "@/lib/entry-type-styles";
+import { MarkdownContent } from "@/components/markdown-content";
 import type { EntryDTO } from "@/lib/types";
 
 type PublicEntryData = Pick<
@@ -20,26 +21,24 @@ export function PublicEntryCard({ entry }: { entry: PublicEntryData }) {
     <Card className="h-full gap-3 py-4">
       <CardHeader className="gap-1.5">
         <div className="flex items-center justify-between gap-2">
-          <Badge variant="secondary">{ENTRY_TYPE_LABELS[entry.type]}</Badge>
+          <Badge
+            variant="secondary"
+            className={ENTRY_TYPE_BADGE_CLASSES[entry.type]}
+          >
+            {ENTRY_TYPE_LABELS[entry.type]}
+          </Badge>
           <span className="text-xs text-muted-foreground">{date}</span>
         </div>
         <CardTitle className="text-base">{entry.title}</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        <p className="text-sm whitespace-pre-wrap text-muted-foreground">
-          {description}
-        </p>
-        {entry.impact && (
-          <p className="rounded-lg bg-primary/5 px-3 py-2 text-sm text-primary">
-            {entry.impact}
-          </p>
-        )}
+        <MarkdownContent content={description} className="text-muted-foreground" />
         {entry.techTags.length > 0 && (
           <div className="flex flex-wrap gap-1.5">
             {entry.techTags.map((tag) => (
               <span
                 key={tag}
-                className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground"
+                className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-secondary-foreground"
               >
                 {tag}
               </span>

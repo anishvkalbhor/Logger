@@ -1,4 +1,5 @@
 import type { EntryType } from "@/generated/prisma/client";
+import { stripMarkdown } from "@/lib/markdown";
 
 const ACTION_VERBS: Record<EntryType, string> = {
   FEATURE: "Built",
@@ -21,7 +22,9 @@ export function buildResumeBullet(entry: BulletSource) {
   const tech = entry.techTags.length
     ? ` using ${entry.techTags.join(", ")}`
     : "";
-  const impact = entry.impact?.trim() ? `, resulting in ${entry.impact.trim()}` : "";
+  const impactText = stripMarkdown(entry.impact?.trim() ?? "");
+  const impact = impactText ? `, resulting in ${impactText}` : "";
+  const whatIDid = stripMarkdown(entry.whatIDid.trim());
 
-  return `${verb} ${entry.title.trim()} — ${entry.whatIDid.trim()}${tech}${impact}.`;
+  return `${verb} ${entry.title.trim()} — ${whatIDid}${tech}${impact}.`;
 }

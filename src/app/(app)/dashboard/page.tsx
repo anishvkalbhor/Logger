@@ -19,7 +19,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { EntryCard } from "@/components/entry-card";
 import { AddEntryFab } from "@/components/add-entry-fab";
 import { StatsRow } from "@/components/stats-row";
-import { ENTRY_TYPE_LABELS } from "@/components/entry-form";
+import { ENTRY_TYPE_LABELS } from "@/lib/entry-type-styles";
 import { ENTRY_TYPES } from "@/lib/validations/entry";
 import { buildResumeBullet } from "@/lib/resume-bullet";
 import { cn } from "@/lib/utils";
