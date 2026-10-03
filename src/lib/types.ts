@@ -33,6 +33,8 @@ export type ProfileDTO = {
   githubUrl: string | null;
   linkedinUrl: string | null;
   websiteUrl: string | null;
+  contactEmail: string | null;
+  contactPhone: string | null;
   resumeUrl: string | null;
   resumeName: string | null;
 };

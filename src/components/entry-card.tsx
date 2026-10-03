@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ENTRY_TYPE_BADGE_CLASSES, ENTRY_TYPE_LABELS } from "@/lib/entry-type-styles";
 import { stripMarkdown } from "@/lib/markdown";
+import { formatDate } from "@/lib/utils";
 import type { EntryDTO } from "@/lib/types";
 
 type EntryCardData = Pick<
@@ -20,11 +21,7 @@ export function EntryCard({
   /** Pass `null` to render a plain, non-linked card (e.g. on the public portfolio page). */
   href?: string | null;
 }) {
-  const date = new Date(entry.date).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
+  const date = formatDate(entry.date);
   const resolvedHref = href === undefined ? `/entries/${entry.id}` : href;
 
   const card = (

@@ -12,7 +12,7 @@ import { CopyBulletButton } from "@/components/copy-bullet-button";
 import { DeleteEntryButton } from "@/components/delete-entry-button";
 import { ENTRY_TYPE_BADGE_CLASSES, ENTRY_TYPE_LABELS } from "@/lib/entry-type-styles";
 import { MarkdownContent } from "@/components/markdown-content";
-import { cn } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import type { EntryDTO } from "@/lib/types";
 
 function Field({
@@ -83,11 +83,7 @@ export default function EntryDetailPage() {
     );
   }
 
-  const date = new Date(entry.date).toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const date = formatDate(entry.date, "long");
 
   return (
     <div className="flex flex-col gap-6">

@@ -6,7 +6,6 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { RichTextEditor } from "@/components/rich-text-editor";
@@ -216,15 +215,13 @@ export function EntryForm({
 
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="impact">Impact / Result</Label>
-        <Textarea
+        <RichTextEditor
           id="impact"
           value={values.impact}
-          onChange={(e) => set("impact", e.target.value)}
+          onChange={(e) => set("impact", e)}
           placeholder="Metrics or outcomes (optional)"
-          rows={2}
         />
       </div>
-
       <div className="flex flex-col gap-1.5">
         <Label htmlFor="challenges">Challenges / Decisions</Label>
         <RichTextEditor

@@ -12,8 +12,10 @@ import {
   Globe,
   Link2,
   Loader2,
+  Mail,
   MapPin,
   Pencil,
+  Phone,
   Trash2,
   Upload,
   X,
@@ -37,6 +39,8 @@ type FormState = {
   githubUrl: string;
   linkedinUrl: string;
   websiteUrl: string;
+  contactEmail: string;
+  contactPhone: string;
   username: string;
 };
 
@@ -50,6 +54,8 @@ function toFormState(profile: ProfileDTO, fallbackName: string): FormState {
     githubUrl: profile.githubUrl ?? "",
     linkedinUrl: profile.linkedinUrl ?? "",
     websiteUrl: profile.websiteUrl ?? "",
+    contactEmail: profile.contactEmail ?? "",
+    contactPhone: profile.contactPhone ?? "",
     username: profile.username ?? "",
   };
 }
@@ -63,7 +69,9 @@ function isProfileEmpty(profile: ProfileDTO) {
     !profile.bio &&
     !profile.githubUrl &&
     !profile.linkedinUrl &&
-    !profile.websiteUrl
+    !profile.websiteUrl &&
+    !profile.contactEmail &&
+    !profile.contactPhone
   );
 }
 
@@ -250,6 +258,16 @@ function ProfileView({
     { href: profile.githubUrl, label: "GitHub", icon: Link2 },
     { href: profile.linkedinUrl, label: "LinkedIn", icon: Link2 },
     { href: profile.websiteUrl, label: "Website", icon: Globe },
+    {
+      href: profile.contactEmail ? `mailto:${profile.contactEmail}` : null,
+      label: profile.contactEmail ?? "",
+      icon: Mail,
+    },
+    {
+      href: profile.contactPhone ? `tel:${profile.contactPhone}` : null,
+      label: profile.contactPhone ?? "",
+      icon: Phone,
+    },
   ].filter((link): link is typeof link & { href: string } => Boolean(link.href));
 
   return (
@@ -613,6 +631,34 @@ function ProfileForm({
           placeholder="https://yourname.dev"
         />
       </div>
+
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="contactEmail">Contact email</Label>
+          <Input
+            id="contactEmail"
+            type="email"
+            value={values.contactEmail}
+            onChange={(e) => onChange("contactEmail", e.target.value)}
+            placeholder="you@example.com"
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label htmlFor="contactPhone">Contact phone</Label>
+          <Input
+            id="contactPhone"
+            type="tel"
+            value={values.contactPhone}
+            onChange={(e) => onChange("contactPhone", e.target.value)}
+            placeholder="+1 555 123 4567"
+          />
+        </div>
+      </div>
+      <p className="-mt-3 text-xs text-muted-foreground">
+        Shown on your public profile if you&apos;ve set a username — visible to
+        anyone with the link, so only add these if you&apos;re comfortable
+        sharing them publicly.
+      </p>
 
       <div className="flex gap-3">
         <Button type="submit" disabled={saving}>

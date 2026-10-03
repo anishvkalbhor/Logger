@@ -25,6 +25,30 @@ const skillsSchema = z
   .default([])
   .transform((skills) => Array.from(new Set(skills)));
 
+const optionalEmail = () =>
+  z
+    .string()
+    .trim()
+    .max(254)
+    .optional()
+    .transform((value) => (value ? value : undefined))
+    .refine((value) => !value || z.email().safeParse(value).success, {
+      message: "Must be a valid email address",
+    });
+
+const PHONE_REGEX = /^[0-9+()\-.\s]{7,20}$/;
+
+const optionalPhone = () =>
+  z
+    .string()
+    .trim()
+    .max(20)
+    .optional()
+    .transform((value) => (value ? value : undefined))
+    .refine((value) => !value || PHONE_REGEX.test(value), {
+      message: "Must be a valid phone number",
+    });
+
 export const USERNAME_REGEX = /^[a-z0-9]+(-[a-z0-9]+)*$/;
 export const USERNAME_FORMAT_MESSAGE =
   "3-30 characters: lowercase letters, numbers, and single hyphens only";
@@ -50,6 +74,8 @@ export const profileInputSchema = z.object({
   githubUrl: optionalUrl(),
   linkedinUrl: optionalUrl(),
   websiteUrl: optionalUrl(),
+  contactEmail: optionalEmail(),
+  contactPhone: optionalPhone(),
   username: usernameSchema,
 });
 

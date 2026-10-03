@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { clerkClient } from "@clerk/nextjs/server";
-import { Briefcase, ExternalLink, FileText, Globe, Link2, MapPin } from "lucide-react";
+import { Briefcase, ExternalLink, FileText, Globe, Link2, Mail, MapPin, Phone } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import { PublicEntryCard } from "@/components/public-entry-card";
@@ -67,6 +67,16 @@ export default async function PublicProfilePage({ params }: PageProps) {
     { href: profile.githubUrl, label: "GitHub", icon: Link2 },
     { href: profile.linkedinUrl, label: "LinkedIn", icon: Link2 },
     { href: profile.websiteUrl, label: "Website", icon: Globe },
+    {
+      href: profile.contactEmail ? `mailto:${profile.contactEmail}` : null,
+      label: profile.contactEmail ?? "",
+      icon: Mail,
+    },
+    {
+      href: profile.contactPhone ? `tel:${profile.contactPhone}` : null,
+      label: profile.contactPhone ?? "",
+      icon: Phone,
+    },
   ].filter((link): link is typeof link & { href: string } => Boolean(link.href));
 
   return (

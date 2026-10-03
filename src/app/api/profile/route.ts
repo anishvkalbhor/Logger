@@ -24,6 +24,8 @@ export async function GET() {
       githubUrl: null,
       linkedinUrl: null,
       websiteUrl: null,
+      contactEmail: null,
+      contactPhone: null,
       resumeUrl: null,
       resumeName: null,
     },

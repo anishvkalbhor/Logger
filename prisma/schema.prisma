@@ -37,19 +37,21 @@ model Entry {
 }
 
 model Profile {
-  id          String   @id @default(cuid())
-  userId      String   @unique
-  username    String?  @unique
-  name        String?
-  experience  String?
-  location    String?
-  skills      String[]
-  bio         String?
-  githubUrl   String?
-  linkedinUrl String?
-  websiteUrl  String?
-  resumeUrl   String?
-  resumeName  String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String   @id @default(cuid())
+  userId       String   @unique
+  username     String?  @unique
+  name         String?
+  experience   String?
+  location     String?
+  skills       String[]
+  bio          String?
+  githubUrl    String?
+  linkedinUrl  String?
+  websiteUrl   String?
+  contactEmail String?
+  contactPhone String?
+  resumeUrl    String?
+  resumeName   String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
