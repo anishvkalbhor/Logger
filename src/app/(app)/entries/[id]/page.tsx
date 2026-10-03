@@ -130,7 +130,7 @@ export default function EntryDetailPage() {
       <div className="flex flex-col gap-4 rounded-xl border p-4">
         <Field label="Problem / Context" value={entry.problemContext} markdown />
         <Field label="What I did" value={entry.whatIDid} markdown />
-        <Field label="Impact / Result" value={entry.impact} />
+        <Field label="Impact / Result" value={entry.impact} markdown />
         <Field label="Challenges / Decisions" value={entry.challenges} markdown />
         {entry.referenceLink && (
           <div className="flex flex-col gap-1">

@@ -218,7 +218,7 @@ export function EntryForm({
         <RichTextEditor
           id="impact"
           value={values.impact}
-          onChange={(e) => set("impact", e)}
+          onChange={(markdown) => set("impact", markdown)}
           placeholder="Metrics or outcomes (optional)"
         />
       </div>
